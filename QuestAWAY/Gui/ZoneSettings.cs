@@ -4,6 +4,7 @@ using ECommons.ImGuiMethods;
 using Dalamud.Bindings.ImGui;
 using Lumina.Excel.Sheets;
 using System;
+using ECommons.DalamudServices.Legacy;
 
 namespace QuestAWAY.Gui
 {

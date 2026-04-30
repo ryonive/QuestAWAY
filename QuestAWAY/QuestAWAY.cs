@@ -153,7 +153,7 @@ namespace QuestAWAY
             });
         }
 
-        internal void ClientState_TerritoryChanged(ushort e)
+        internal void ClientState_TerritoryChanged(uint e)
         {
             if (!cfg.ZoneSettings.TryGetValue(e, out CurrentProfile))
             {
