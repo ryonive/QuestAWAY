@@ -2,75 +2,74 @@
 using System.Diagnostics;
 using System.Numerics;
 
-namespace QuestAWAY.Gui
+namespace QuestAWAY.Gui;
+
+internal class DevSettings
 {
-    internal class DevSettings
+    internal static void Draw()
     {
-        internal static void Draw()
+        ImGui.Checkbox("[dev] Enable texture collecting", ref P.Collect);
+
+        if(P.Collect)
         {
-            ImGui.Checkbox("[dev] Enable texture collecting", ref P.collect);
-
-            if (P.collect)
+            if(ImGui.Button("Reset"))
             {
-                if (ImGui.Button("Reset"))
-                {
-                    P.texSet.Clear();
-                }
+                P.TexSet.Clear();
+            }
 
-                ImGui.SameLine();
-                ImGui.Checkbox("Display textures", ref P.collectDisplay);
+            ImGui.SameLine();
+            ImGui.Checkbox("Display textures", ref P.CollectDisplay);
 
-                if (P.collectDisplay)
+            if(P.CollectDisplay)
+            {
+                foreach(var e in P.TexSet)
                 {
-                    foreach (var e in P.texSet)
+                    ImGuiDrawImage(e);
+                    ImGui.SameLine();
+
+                    if(!Static.MapIcons.Contains(e))
                     {
-                        ImGuiDrawImage(e);
-                        ImGui.SameLine();
+                        ImGui.PushStyleColor(ImGuiCol.Button, 0xff0000ff);
+                    }
 
-                        if (!Static.MapIcons.Contains(e))
-                        {
-                            ImGui.PushStyleColor(ImGuiCol.Button, 0xff0000ff);
-                        }
+                    if(ImGui.Button("Copy: " + e))
+                    {
+                        ImGui.SetClipboardText(e);
+                    }
 
-                        if (ImGui.Button("Copy: " + e))
-                        {
-                            ImGui.SetClipboardText(e);
-                        }
-
-                        if (!Static.MapIcons.Contains(e))
-                        {
-                            ImGui.PopStyleColor();
-                        }
+                    if(!Static.MapIcons.Contains(e))
+                    {
+                        ImGui.PopStyleColor();
                     }
                 }
-
-                var s = string.Join("\n", P.texSet);
-
-                ImGui.InputTextMultiline("##QADATA", ref s, 1000000, new Vector2(300f, 100f));
             }
 
-            ImGui.Separator();
+            var s = string.Join("\n", P.TexSet);
 
-            if (ImGui.Button("Clear hidden textures list" + (ImGui.GetIO().KeyCtrl ? "" : " (hold ctrl and click)")) && ImGui.GetIO().KeyCtrl)
+            ImGui.InputTextMultiline("##QADATA", ref s, 1000000, new Vector2(300f, 100f));
+        }
+
+        ImGui.Separator();
+
+        if(ImGui.Button("Clear hidden textures list" + (ImGui.GetIO().KeyCtrl ? "" : " (hold ctrl and click)")) && ImGui.GetIO().KeyCtrl)
+        {
+            P.Config.HiddenTextures.Clear();
+            Utils.BuildHiddenByteSet();
+        }
+
+        ImGui.Checkbox("Profiling", ref P.Profiling);
+
+        if(P.Profiling)
+        {
+            ImGui.Text("Total time: " + P.TotalTime);
+            ImGui.Text("Total ticks: " + P.TotalTicks);
+            ImGui.Text("Tick avg: " + (P.TotalTime / (float)P.TotalTicks));
+            ImGui.Text("MS avg: " + (P.TotalTime / (float)P.TotalTicks / Stopwatch.Frequency * 1000) + " ms");
+
+            if(ImGui.Button("Reset##SW"))
             {
-                P.cfg.HiddenTextures.Clear();
-                P.BuildHiddenByteSet();
-            }
-
-            ImGui.Checkbox("Profiling", ref P.profiling);
-
-            if (P.profiling)
-            {
-                ImGui.Text("Total time: " + P.totalTime);
-                ImGui.Text("Total ticks: " + P.totalTicks);
-                ImGui.Text("Tick avg: " + P.totalTime / (float)P.totalTicks);
-                ImGui.Text("MS avg: " + P.totalTime / (float)P.totalTicks / Stopwatch.Frequency * 1000 + " ms");
-
-                if (ImGui.Button("Reset##SW"))
-                {
-                    P.totalTicks = 0;
-                    P.totalTime = 0;
-                }
+                P.TotalTicks = 0;
+                P.TotalTime = 0;
             }
         }
     }

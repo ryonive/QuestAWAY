@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<Authors>NightmareXIV</Authors>
-		<Version>2.0.0.11</Version>
+		<Version>2.0.1.0</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -96,7 +96,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="DalamudPackager" Version="15.0.0" />
-	  <PackageReference Include="ECommons" Version="3.2.0.6" />
+	  <PackageReference Include="ECommons" Version="3.2.0.19" />
 	</ItemGroup>
 
 	<ItemGroup>
